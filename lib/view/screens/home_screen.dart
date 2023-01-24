@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/Zecrets.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   //const HomeScreen(Key? key) : super(key: key);
@@ -15,7 +17,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget body() {
-    final infoTextStyle = TextStyle(color: Colors.white,fontSize: 30);
+    const infoTextStyle = TextStyle(color: Colors.white,fontSize: 30);
     return Padding(
       padding: const EdgeInsets.only(top:10,left: 5,right: 5),
       child: Column(

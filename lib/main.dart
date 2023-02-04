@@ -12,10 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       //showSemanticsDebugger: true,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.teal,
+        scaffoldBackgroundColor: Colors.black12,
       ),
       routes: {
         'homescreen' : (_) => const HomeScreen()

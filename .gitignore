@@ -44,4 +44,7 @@ app.*.map.json
 /android/app/release
 
 # Personal
-Zecrets.dart
+Secrets.dart
+
+#VsCode
+.vscode

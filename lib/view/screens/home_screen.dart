@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/Zecrets.dart';
+import '../../utils/Secrets.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,35 +12,36 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
           child: SingleChildScrollView(child: body())
       ),
-
     );
   }
 
   Widget body() {
-    const infoTextStyle = TextStyle(color: Colors.white,fontSize: 30);
+    const categoryHeaderStyle = TextStyle(color: Colors.deepOrange,fontSize: 20);
     return Padding(
-      padding: const EdgeInsets.only(top:10,left: 5,right: 5),
+      padding: const EdgeInsets.only(top:10,left: 7,right: 7),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           header(),
           const SizedBox(height: 10,),
-          Text("Popular",style: infoTextStyle,),
-          SizedBox(height: 250, child: movies()),
-          Text("Actor",style: infoTextStyle,),
-          SizedBox(height: 250, child: actors()),
-
+          Text("Latest",style: categoryHeaderStyle,),
+          SizedBox(height: 270, child: movies()),
+          Text("Porpular",style: categoryHeaderStyle,),
+          SizedBox(height: 270, child: movies()),
+          Text("Favourites",style: categoryHeaderStyle,),
+          SizedBox(height: 270, child: movies()),
         ],
       )
     );
   }
 
   Widget header(){
-    String title = '¡Buenos días!';
+    //Improve this header
+    String title = 'Movvvies';
     double iconSize = 30;
     Color iconColor = Colors.white;
+
     return Row(
-      //mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(title,
           style: TextStyle(fontSize: 30,color: iconColor),
@@ -49,9 +50,20 @@ class HomeScreen extends StatelessWidget {
         const Spacer(),
         Row(
           children: [
-            Icon(Icons.new_releases_outlined,color: iconColor,size: iconSize,),
-            //const SizedBox(width: 10,),
-            //Icon(Icons.settings,color: iconColor,size: iconSize,)
+            Icon(Icons.cast,color: iconColor,size: iconSize),
+            SizedBox(width: 10,),
+            //Trying out Icons like this
+            Text(
+              String.fromCharCode(Icons.search_outlined.codePoint),
+              style: TextStyle(
+                inherit: false,
+                color: Colors.white,
+                fontSize: iconSize,
+                fontWeight: FontWeight.w100,
+                fontFamily: Icons.search_outlined.fontFamily,
+                package: Icons.search_outlined.fontPackage,
+              ),
+            )
           ],
         )
       ]
@@ -61,47 +73,46 @@ class HomeScreen extends StatelessWidget {
   Widget movies(){
     List<Widget> movies = [];
     for(int i = 0; i<10; i++){
-      movies.add(movieCard("Movie ${i}",true));
+      movies.add(movieCard("Random movie name even tho i dont ${i}",true));
     }
 
-    return ListView.separated(
-        itemBuilder: (context,index){
-          return movies[index];
-        },
-        separatorBuilder: (context, index) => SizedBox(width: 10,),
-        itemCount: movies.length,
-      scrollDirection: Axis.horizontal,
-    );
-  }
-
-  Widget actors(){
-    List<Widget> movies = [];
-    for(int i = 0; i<10; i++){
-      movies.add(movieCard("Damián Suarez",false));
-    }
-
-    return ListView.separated(
-      itemBuilder: (context,index){
-        return movies[index];
-      },
-      separatorBuilder: (context, index) => SizedBox(width: 10,),
-      itemCount: movies.length,
-      scrollDirection: Axis.horizontal,
+    return Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: ListView.separated(
+          itemBuilder: (context,index){
+            return movies[index];
+          },
+          separatorBuilder: (context, index) => SizedBox(width: 10,),
+          itemCount: movies.length,
+        scrollDirection: Axis.horizontal,
+      ),
     );
   }
 
   Widget movieCard(String title,bool movie){
-    final textStyle = TextStyle(color: Colors.white,fontSize: 20);
+    const textStyle = TextStyle(color: Colors.white,fontSize: 17,
+        overflow: TextOverflow.ellipsis);
 
-    return Column(
-      children: [
-        ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.network(movie ? 'https://api.lorem.space/image/movie?w=150&h=220'
-                : "https://api.lorem.space/image/face?w=150&h=150")
-        ),
-        Text(title,style: textStyle,)
-      ],
+    return SizedBox(
+      width: 150,
+      child: Column(
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(movie ? 'https://api.lorem.space/image/movie?w=150&h=220'
+                  : "https://api.lorem.space/image/face?w=150&h=150")
+          ),
+          Text(title,style: textStyle,textAlign: TextAlign.left,),
+          Row(
+            children: [
+              Text("5.4",style: TextStyle(color: Colors.white70),),
+              SizedBox(width: 5,),
+              Icon(Icons.star,size: 15,color: Colors.white54,)
+            ],
+          )
+        ],
+      ),
     );
   }
 

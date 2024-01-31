@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-import '../../utils/Secrets.dart';
+import 'package:flutter/material.dart';
+import 'dart:developer' as dev;
+import 'package:http/http.dart' as http;
+import 'package:movvvies/utils/secrets.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,6 +11,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // Test zone
+    testApiCallWithAccessTokenAuth();
+    fetchingMovies();
+
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(child: body())
@@ -25,11 +33,11 @@ class HomeScreen extends StatelessWidget {
           header(),
           const SizedBox(height: 10,),
           Text("Latest",style: categoryHeaderStyle,),
-          SizedBox(height: 270, child: movies()),
+          SizedBox(height: 250, child: movies()),
           Text("Porpular",style: categoryHeaderStyle,),
-          SizedBox(height: 270, child: movies()),
+          SizedBox(height: 250, child: movies()),
           Text("Favourites",style: categoryHeaderStyle,),
-          SizedBox(height: 270, child: movies()),
+          SizedBox(height: 250, child: movies()),
         ],
       )
     );
@@ -94,14 +102,14 @@ class HomeScreen extends StatelessWidget {
         overflow: TextOverflow.ellipsis);
 
     return SizedBox(
-      width: 150,
+      width: 130,
       child: Column(
         //crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Image.network(movie ? 'https://api.lorem.space/image/movie?w=150&h=220'
-                  : "https://api.lorem.space/image/face?w=150&h=150")
+                  : "https://api.lorem.space/image/face?w=130&h=130")
           ),
           Text(title,style: textStyle,textAlign: TextAlign.left,),
           Row(
@@ -116,4 +124,38 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  testApiCallWithAccessTokenAuth() async{
+    dev.log('Fetching data with Access Token Auth ...');
+    Uri uri = Uri.parse('https://api.themoviedb.org/3/authentication');
+    final response = await http.get(
+        uri,
+        headers: {
+          HttpHeaders.authorizationHeader : 'Bearer ${Secrets.accessTokenAuth}',
+          HttpHeaders.acceptHeader : 'application/json',
+        }
+    );
+    if(response.statusCode == 200){
+      dev.log(response.body.toString());
+    }else{
+      throw Exception('Failed to fetch data with Access Token Auth');
+    }
+  }
+
+ fetchingMovies() async {
+    dev.log('Fetching data with API key ...');
+    final response = await http.get(
+        Uri.parse('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1'),
+        headers: {
+          HttpHeaders.authorizationHeader : 'Bearer ${Secrets.accessTokenAuth}',
+          HttpHeaders.acceptHeader : 'application/json',
+        }
+    );
+    if(response.statusCode == 200){
+      dev.log('Success');
+      dev.log(response.body.toString());
+    }else{
+      throw Exception('Failed to fetch data with API Key');
+    }
+
+  }
 }
